@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { ArrowRight, TrendingUp } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import chanakyaIcon from "@/assets/chanakya-icon.png";
 import { VerdictData } from "@/lib/groq";
 
 interface VerdictScreenProps {
