@@ -106,6 +106,10 @@ export default {
           "50%": { transform: "scale(1.05)" },
           "100%": { transform: "scale(1)" },
         },
+        "hero-image": {
+          "0%": { opacity: "0", transform: "scale(0.9)" },
+          "100%": { opacity: "0.8", transform: "scale(1)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -117,6 +121,7 @@ export default {
         "verdict-reveal": "verdict-reveal 0.6s ease-out",
         "msg-in": "msg-in 0.35s ease-out both",
         "bg-zoom": "bg-zoom 20s ease-in-out infinite",
+        "hero-image": "hero-image 0.8s ease-out both",
       },
     },
   },
