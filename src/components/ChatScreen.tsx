@@ -3,7 +3,6 @@ import { ArrowUp } from "lucide-react";
 import { ChatMessage, callGroq, parseVerdict, VerdictData } from "@/lib/groq";
 
 interface ChatScreenProps {
-  apiKey: string;
   initialIdea: string;
   onVerdict: (verdict: VerdictData) => void;
 }
@@ -44,7 +43,7 @@ const RoundPips = ({ round }: { round: number }) => (
   </div>
 );
 
-const ChatScreen = ({ apiKey, initialIdea, onVerdict }: ChatScreenProps) => {
+const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
   const [history, setHistory] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -65,7 +64,7 @@ const ChatScreen = ({ apiKey, initialIdea, onVerdict }: ChatScreenProps) => {
         content: `Here's my startup idea: ${initialIdea}`,
       };
       try {
-        const reply = await callGroq(apiKey, [userMsg]);
+        const reply = await callGroq([userMsg]);
         setHistory([userMsg, { role: "assistant", content: reply }]);
         setMessages([
           { role: "user", content: initialIdea },
@@ -78,7 +77,7 @@ const ChatScreen = ({ apiKey, initialIdea, onVerdict }: ChatScreenProps) => {
       }
     };
     initChat();
-  }, [apiKey, initialIdea]);
+  }, [initialIdea]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -101,7 +100,7 @@ const ChatScreen = ({ apiKey, initialIdea, onVerdict }: ChatScreenProps) => {
     setLoading(true);
 
     try {
-      const reply = await callGroq(apiKey, newHistory);
+      const reply = await callGroq(newHistory);
       const assistantMsg: ChatMessage = { role: "assistant", content: reply };
       setHistory((prev) => [...prev, assistantMsg]);
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);

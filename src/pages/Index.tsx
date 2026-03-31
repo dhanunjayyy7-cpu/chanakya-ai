@@ -8,12 +8,10 @@ type Screen = "landing" | "chat" | "verdict";
 
 const Index = () => {
   const [screen, setScreen] = useState<Screen>("landing");
-  const [apiKey, setApiKey] = useState("");
   const [idea, setIdea] = useState("");
   const [verdict, setVerdict] = useState<VerdictData | null>(null);
 
-  const handleStart = (key: string, startupIdea: string) => {
-    setApiKey(key);
+  const handleStart = (startupIdea: string) => {
     setIdea(startupIdea);
     setScreen("chat");
   };
@@ -24,7 +22,6 @@ const Index = () => {
   };
 
   const handleReset = () => {
-    setApiKey("");
     setIdea("");
     setVerdict(null);
     setScreen("landing");
@@ -33,7 +30,6 @@ const Index = () => {
   if (screen === "chat") {
     return (
       <ChatScreen
-        apiKey={apiKey}
         initialIdea={idea}
         onVerdict={handleVerdict}
       />
