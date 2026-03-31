@@ -15,7 +15,7 @@ interface DisplayMessage {
 const TypingIndicator = () => (
   <div className="flex items-start gap-3">
     <div className="w-8 h-8 rounded-full border-2 border-primary flex items-center justify-center text-xs font-heading font-bold text-primary shrink-0">
-      MR
+      AR
     </div>
     <div className="bg-card border border-border rounded-lg px-4 py-3 flex gap-1.5">
       <span className="w-1.5 h-1.5 rounded-full bg-primary animate-dot-pulse" />
@@ -27,8 +27,8 @@ const TypingIndicator = () => (
 
 const RoundPips = ({ round }: { round: number }) => (
   <div className="flex flex-col items-center gap-2">
-    <div className="flex gap-2">
-      {[1, 2, 3].map((i) => (
+  <div className="flex gap-2">
+      {[1, 2, 3, 4, 5].map((i) => (
         <div
           key={i}
           className={`w-3 h-3 rounded-full border-2 border-primary transition-colors ${
@@ -38,7 +38,7 @@ const RoundPips = ({ round }: { round: number }) => (
       ))}
     </div>
     <span className="text-xs text-muted-foreground">
-      Round {Math.min(round + 1, 3)} of 3
+      Round {Math.min(round + 1, 5)} of 5
     </span>
   </div>
 );
@@ -134,7 +134,7 @@ const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
           msg.role === "assistant" ? (
             <div key={i} className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-full border-2 border-primary flex items-center justify-center text-xs font-heading font-bold text-primary shrink-0">
-                MR
+                AR
               </div>
               <div className="bg-card border border-border rounded-lg px-4 py-3 max-w-[80%] text-sm leading-relaxed">
                 {msg.content}
