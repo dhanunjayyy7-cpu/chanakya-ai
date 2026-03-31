@@ -151,8 +151,8 @@ const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
         {messages.map((msg, i) =>
           msg.role === "assistant" ? (
             <div key={i} className="flex items-start gap-3 animate-msg-in">
-              <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0">
-                <TrendingUp size={16} className="text-primary" />
+              <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0 overflow-hidden">
+                <img src={chanakyaIcon} alt="Chanakya" width={20} height={20} className="opacity-70" />
               </div>
               <div className="bg-card/80 backdrop-blur-sm border border-border/60 rounded-xl px-5 py-3.5 max-w-[80%] text-sm leading-relaxed shadow-sm">
                 {msg.content}
