@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import ShaderBackground from "./components/ShaderBackground";
 
 const queryClient = new QueryClient();
 
@@ -13,18 +14,12 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <div className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed relative overflow-hidden">
-        {/* Background image with slow zoom */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-bg-zoom"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=80')`,
-          }}
-        />
-        {/* Dark overlay */}
-        <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.82)' }} />
+      <div className="min-h-screen relative overflow-hidden">
+        <ShaderBackground />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.55)', zIndex: 1 }} />
         {/* Content */}
-        <div className="relative z-10 min-h-screen">
+        <div className="relative min-h-screen" style={{ zIndex: 2 }}>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
