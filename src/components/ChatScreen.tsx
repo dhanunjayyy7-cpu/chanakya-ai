@@ -13,9 +13,10 @@ interface DisplayMessage {
 }
 
 const LOADING_TEXTS = [
-  "Arjun is analyzing your pitch...",
+  "Chanakya is analyzing your strategy...",
   "Challenging your assumptions...",
-  "Evaluating your business model...",
+  "Evaluating your thinking...",
+  "Looking for weaknesses...",
 ];
 
 const TypingIndicator = ({ round }: { round: number }) => {
