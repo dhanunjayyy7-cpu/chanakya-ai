@@ -15,7 +15,7 @@ interface DisplayMessage {
 const TypingIndicator = () => (
   <div className="flex items-start gap-3">
     <div className="w-8 h-8 rounded-full border-2 border-primary flex items-center justify-center text-xs font-heading font-bold text-primary shrink-0">
-      MR
+      AR
     </div>
     <div className="bg-card border border-border rounded-lg px-4 py-3 flex gap-1.5">
       <span className="w-1.5 h-1.5 rounded-full bg-primary animate-dot-pulse" />
