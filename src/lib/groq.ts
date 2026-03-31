@@ -28,7 +28,7 @@ export interface VerdictData {
   scores: { idea: number; market: number; execution: number };
 }
 
-const GROQ_API_KEY = "[PASTE YOUR GROQ KEY HERE]";
+const GROQ_API_KEY = "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";
 
 export async function callGroq(
   messages: ChatMessage[]
