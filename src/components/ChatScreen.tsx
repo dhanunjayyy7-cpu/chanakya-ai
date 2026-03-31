@@ -43,7 +43,7 @@ const RoundPips = ({ round }: { round: number }) => (
   </div>
 );
 
-const ChatScreen = ({ apiKey, initialIdea, onVerdict }: ChatScreenProps) => {
+const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
   const [history, setHistory] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
