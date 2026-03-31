@@ -25,6 +25,7 @@ export interface ChatMessage {
 
 export interface VerdictData {
   type: "PASS" | "CONDITIONAL YES" | "INVEST";
+  criticism: string;
   reason: string;
   scores: { idea: number; market: number; execution: number };
 }
