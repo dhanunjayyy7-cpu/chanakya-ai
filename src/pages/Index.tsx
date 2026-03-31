@@ -1,16 +1,50 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import LandingScreen from "@/components/LandingScreen";
+import ChatScreen from "@/components/ChatScreen";
+import VerdictScreen from "@/components/VerdictScreen";
+import { VerdictData } from "@/lib/groq";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
-  return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
-    </div>
-  );
+type Screen = "landing" | "chat" | "verdict";
+
+const Index = () => {
+  const [screen, setScreen] = useState<Screen>("landing");
+  const [apiKey, setApiKey] = useState("");
+  const [idea, setIdea] = useState("");
+  const [verdict, setVerdict] = useState<VerdictData | null>(null);
+
+  const handleStart = (key: string, startupIdea: string) => {
+    setApiKey(key);
+    setIdea(startupIdea);
+    setScreen("chat");
+  };
+
+  const handleVerdict = (v: VerdictData) => {
+    setVerdict(v);
+    setScreen("verdict");
+  };
+
+  const handleReset = () => {
+    setApiKey("");
+    setIdea("");
+    setVerdict(null);
+    setScreen("landing");
+  };
+
+  if (screen === "chat") {
+    return (
+      <ChatScreen
+        apiKey={apiKey}
+        initialIdea={idea}
+        onVerdict={handleVerdict}
+      />
+    );
+  }
+
+  if (screen === "verdict" && verdict) {
+    return <VerdictScreen verdict={verdict} onReset={handleReset} />;
+  }
+
+  return <LandingScreen onStart={handleStart} />;
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
