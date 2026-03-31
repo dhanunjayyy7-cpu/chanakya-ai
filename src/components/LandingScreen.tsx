@@ -13,16 +13,6 @@ const LandingScreen = ({ onStart }: LandingScreenProps) => {
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-lg text-center">
-        <div className="animate-fade-up">
-          <div className="flex justify-center mb-6">
-            <img
-              src={chanakyaIcon}
-              alt="Chanakya AI"
-              width={80}
-              height={80}
-              className="opacity-80 animate-hero-image drop-shadow-[0_0_20px_hsl(var(--primary)/0.3)]"
-            />
-          </div>
           <h1 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-3 leading-[1.15]">
             Chanakya AI
           </h1>
