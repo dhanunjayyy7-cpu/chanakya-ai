@@ -22,7 +22,6 @@ const Index = () => {
   };
 
   const handleReset = () => {
-    setApiKey("");
     setIdea("");
     setVerdict(null);
     setScreen("landing");
