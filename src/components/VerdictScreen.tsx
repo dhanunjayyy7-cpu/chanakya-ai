@@ -19,7 +19,7 @@ const VerdictScreen = ({ verdict, onReset }: VerdictScreenProps) => {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-lg text-center">
         <p className="text-muted-foreground text-sm mb-2">
-          Marcus Reid · Final Verdict
+          Arjun · AI Venture Capitalist · Final Verdict
         </p>
 
         <div

@@ -134,7 +134,7 @@ const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
           msg.role === "assistant" ? (
             <div key={i} className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-full border-2 border-primary flex items-center justify-center text-xs font-heading font-bold text-primary shrink-0">
-                MR
+                AR
               </div>
               <div className="bg-card border border-border rounded-lg px-4 py-3 max-w-[80%] text-sm leading-relaxed">
                 {msg.content}
