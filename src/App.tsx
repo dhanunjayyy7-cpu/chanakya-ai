@@ -13,17 +13,21 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <div
-        className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=80')`,
-        }}
-      >
-        <div className="min-h-screen" style={{ background: 'rgba(0,0,0,0.9)' }}>
+      <div className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed relative overflow-hidden">
+        {/* Background image with slow zoom */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-bg-zoom"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=80')`,
+          }}
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.82)' }} />
+        {/* Content */}
+        <div className="relative z-10 min-h-screen">
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

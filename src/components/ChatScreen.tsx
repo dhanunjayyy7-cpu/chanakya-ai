@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, TrendingUp } from "lucide-react";
 import { ChatMessage, callGroq, parseVerdict, VerdictData } from "@/lib/groq";
 
 interface ChatScreenProps {
@@ -21,18 +21,18 @@ const LOADING_TEXTS = [
 const TypingIndicator = ({ round }: { round: number }) => {
   const text = LOADING_TEXTS[round % LOADING_TEXTS.length];
   return (
-    <div className="flex flex-col items-start gap-2">
+    <div className="flex flex-col items-start gap-2 animate-fade-in">
       <div className="flex items-start gap-3">
-        <div className="w-8 h-8 rounded-full border-2 border-primary flex items-center justify-center text-xs font-heading font-bold text-primary shrink-0">
-          AR
+        <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0">
+          <TrendingUp size={16} className="text-primary" />
         </div>
-        <div className="bg-card border border-border rounded-lg px-4 py-3 flex gap-1.5">
+        <div className="bg-card/80 backdrop-blur-sm border border-border/60 rounded-xl px-4 py-3 flex gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-dot-pulse" />
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-dot-pulse [animation-delay:0.2s]" />
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-dot-pulse [animation-delay:0.4s]" />
         </div>
       </div>
-      <p className="text-muted-foreground text-xs ml-11">{text}</p>
+      <p className="text-muted-foreground text-xs ml-12">{text}</p>
     </div>
   );
 };
@@ -43,13 +43,13 @@ const RoundPips = ({ round }: { round: number }) => (
       {[1, 2, 3, 4, 5].map((i) => (
         <div
           key={i}
-          className={`w-3 h-3 rounded-full border-2 border-primary transition-colors ${
-            i <= round ? "bg-primary" : "bg-transparent"
+          className={`w-3 h-3 rounded-full border-2 border-primary transition-all duration-300 ${
+            i <= round ? "bg-primary shadow-[0_0_8px_hsl(var(--primary)/0.4)]" : "bg-transparent"
           }`}
         />
       ))}
     </div>
-    <span className="text-xs text-muted-foreground">
+    <span className="text-xs text-muted-foreground tracking-wide">
       Round {Math.min(round + 1, 5)} of 5
     </span>
   </div>
@@ -148,17 +148,17 @@ const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
       <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-4 pb-4">
         {messages.map((msg, i) =>
           msg.role === "assistant" ? (
-            <div key={i} className="flex items-start gap-3 animate-fade-in">
-              <div className="w-8 h-8 rounded-full border-2 border-primary flex items-center justify-center text-xs font-heading font-bold text-primary shrink-0">
-                AR
+            <div key={i} className="flex items-start gap-3 animate-msg-in">
+              <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0">
+                <TrendingUp size={16} className="text-primary" />
               </div>
-              <div className="bg-card border border-border rounded-lg px-4 py-3 max-w-[80%] text-sm leading-relaxed">
+              <div className="bg-card/80 backdrop-blur-sm border border-border/60 rounded-xl px-5 py-3.5 max-w-[80%] text-sm leading-relaxed shadow-sm">
                 {msg.content}
               </div>
             </div>
           ) : (
-            <div key={i} className="flex justify-end">
-              <div className="bg-secondary rounded-lg px-4 py-3 max-w-[80%] text-sm leading-relaxed">
+            <div key={i} className="flex justify-end animate-msg-in">
+              <div className="bg-secondary/80 backdrop-blur-sm border border-border/40 rounded-xl px-5 py-3.5 max-w-[80%] text-sm leading-relaxed">
                 {msg.content}
               </div>
             </div>
@@ -170,19 +170,19 @@ const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
         )}
       </div>
 
-      <div className="py-4 border-t border-border flex gap-2">
+      <div className="py-4 border-t border-border/50 flex gap-2">
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Type your response..."
           rows={1}
-          className="flex-1 bg-secondary border border-border rounded-md px-3 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary text-sm resize-none"
+          className="flex-1 bg-secondary/60 backdrop-blur-sm border border-border/50 rounded-xl px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/40 text-sm resize-none transition-all duration-200 hover:border-primary/30"
         />
         <button
           onClick={send}
           disabled={!input.trim() || loading}
-          className="bg-primary text-primary-foreground w-10 h-10 rounded-md flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+          className="bg-primary text-primary-foreground w-10 h-10 rounded-xl flex items-center justify-center hover:scale-[1.03] hover:brightness-110 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
         >
           <ArrowUp size={18} />
         </button>
