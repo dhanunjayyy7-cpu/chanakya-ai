@@ -19,7 +19,7 @@ const App = () => (
         {/* Dark overlay for text readability */}
         <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.55)', zIndex: 1 }} />
         {/* Content */}
-        <div className="relative z-10 min-h-screen">
+        <div className="relative min-h-screen" style={{ zIndex: 2 }}>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
