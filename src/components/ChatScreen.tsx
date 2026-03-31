@@ -64,7 +64,7 @@ const ChatScreen = ({ apiKey, initialIdea, onVerdict }: ChatScreenProps) => {
         content: `Here's my startup idea: ${initialIdea}`,
       };
       try {
-        const reply = await callGroq(apiKey, [userMsg]);
+        const reply = await callGroq([userMsg]);
         setHistory([userMsg, { role: "assistant", content: reply }]);
         setMessages([
           { role: "user", content: initialIdea },
