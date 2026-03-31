@@ -19,7 +19,7 @@ const App = () => (
           backgroundImage: `url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=80')`,
         }}
       >
-        <div className="min-h-screen" style={{ background: 'rgba(0,0,0,0.85)' }}>
+        <div className="min-h-screen" style={{ background: 'rgba(0,0,0,0.9)' }}>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />

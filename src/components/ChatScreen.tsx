@@ -12,22 +12,34 @@ interface DisplayMessage {
   content: string;
 }
 
-const TypingIndicator = () => (
-  <div className="flex items-start gap-3">
-    <div className="w-8 h-8 rounded-full border-2 border-primary flex items-center justify-center text-xs font-heading font-bold text-primary shrink-0">
-      AR
+const LOADING_TEXTS = [
+  "Arjun is analyzing your pitch...",
+  "Challenging your assumptions...",
+  "Evaluating your business model...",
+];
+
+const TypingIndicator = ({ round }: { round: number }) => {
+  const text = LOADING_TEXTS[round % LOADING_TEXTS.length];
+  return (
+    <div className="flex flex-col items-start gap-2">
+      <div className="flex items-start gap-3">
+        <div className="w-8 h-8 rounded-full border-2 border-primary flex items-center justify-center text-xs font-heading font-bold text-primary shrink-0">
+          AR
+        </div>
+        <div className="bg-card border border-border rounded-lg px-4 py-3 flex gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-dot-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-dot-pulse [animation-delay:0.2s]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-dot-pulse [animation-delay:0.4s]" />
+        </div>
+      </div>
+      <p className="text-muted-foreground text-xs ml-11">{text}</p>
     </div>
-    <div className="bg-card border border-border rounded-lg px-4 py-3 flex gap-1.5">
-      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-dot-pulse" />
-      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-dot-pulse [animation-delay:0.2s]" />
-      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-dot-pulse [animation-delay:0.4s]" />
-    </div>
-  </div>
-);
+  );
+};
 
 const RoundPips = ({ round }: { round: number }) => (
   <div className="flex flex-col items-center gap-2">
-  <div className="flex gap-2">
+    <div className="flex gap-2">
       {[1, 2, 3, 4, 5].map((i) => (
         <div
           key={i}
@@ -42,6 +54,8 @@ const RoundPips = ({ round }: { round: number }) => (
     </span>
   </div>
 );
+
+const REPLY_DELAY = 1500;
 
 const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
@@ -65,6 +79,7 @@ const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
       };
       try {
         const reply = await callGroq([userMsg]);
+        await new Promise((r) => setTimeout(r, REPLY_DELAY));
         setHistory([userMsg, { role: "assistant", content: reply }]);
         setMessages([
           { role: "user", content: initialIdea },
@@ -101,13 +116,14 @@ const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
 
     try {
       const reply = await callGroq(newHistory);
+      await new Promise((r) => setTimeout(r, REPLY_DELAY));
       const assistantMsg: ChatMessage = { role: "assistant", content: reply };
       setHistory((prev) => [...prev, assistantMsg]);
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
 
       const verdict = parseVerdict(reply);
       if (verdict) {
-        setTimeout(() => onVerdict(verdict), 1500);
+        setTimeout(() => onVerdict(verdict), 2000);
       }
     } catch (e: any) {
       setError(e.message);
@@ -132,7 +148,7 @@ const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
       <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-4 pb-4">
         {messages.map((msg, i) =>
           msg.role === "assistant" ? (
-            <div key={i} className="flex items-start gap-3">
+            <div key={i} className="flex items-start gap-3 animate-fade-in">
               <div className="w-8 h-8 rounded-full border-2 border-primary flex items-center justify-center text-xs font-heading font-bold text-primary shrink-0">
                 AR
               </div>
@@ -148,7 +164,7 @@ const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
             </div>
           )
         )}
-        {loading && <TypingIndicator />}
+        {loading && <TypingIndicator round={round} />}
         {error && (
           <p className="text-destructive text-sm text-center">{error}</p>
         )}
