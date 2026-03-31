@@ -12,10 +12,11 @@ Rules:
 - Final verdict format ONLY:
 
 VERDICT: [PASS / CONDITIONAL YES / INVEST]
-REASON: [2-3 sentences max, brutal honesty]
+CRITICISM: [One sharp sentence highlighting the single biggest weakness — e.g. "weak differentiation", "unclear moat", "crowded market with no edge", "high execution risk with unproven team"]
+REASON: [2-3 sentences max. Be decisive and specific. Never use generic phrases like "has potential", "execution is key", or "interesting concept". State exactly why you would or would not invest. Sound like a real VC — slightly harsh, confident, zero fluff.]
 SCORE: Idea [X/10] | Market [X/10] | Execution [X/10]
 
-Never break character. Never be encouraging without reason.`;
+Never break character. Never be encouraging without reason. Never be polite or motivational in the verdict.`;
 
 export interface ChatMessage {
   role: "system" | "user" | "assistant";
