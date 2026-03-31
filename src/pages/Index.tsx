@@ -30,7 +30,6 @@ const Index = () => {
   if (screen === "chat") {
     return (
       <ChatScreen
-        apiKey={apiKey}
         initialIdea={idea}
         onVerdict={handleVerdict}
       />

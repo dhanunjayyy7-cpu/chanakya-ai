@@ -28,15 +28,16 @@ export interface VerdictData {
   scores: { idea: number; market: number; execution: number };
 }
 
+const GROQ_API_KEY = "[PASTE YOUR GROQ KEY HERE]";
+
 export async function callGroq(
-  apiKey: string,
   messages: ChatMessage[]
 ): Promise<string> {
   const res = await fetch(GROQ_API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${GROQ_API_KEY}`,
     },
     body: JSON.stringify({
       model: MODEL,

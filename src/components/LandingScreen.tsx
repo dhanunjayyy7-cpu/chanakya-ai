@@ -2,14 +2,13 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 
 interface LandingScreenProps {
-  onStart: (apiKey: string, idea: string) => void;
+  onStart: (idea: string) => void;
 }
 
 const LandingScreen = ({ onStart }: LandingScreenProps) => {
-  const [apiKey, setApiKey] = useState("");
   const [idea, setIdea] = useState("");
 
-  const canSubmit = apiKey.trim().length > 0 && idea.trim().length > 0;
+  const canSubmit = idea.trim().length > 0;
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
@@ -19,24 +18,14 @@ const LandingScreen = ({ onStart }: LandingScreenProps) => {
           <br />
           <span className="text-primary">Get destroyed.</span>
         </h1>
-        <p className="text-muted-foreground mb-10 max-w-md mx-auto leading-relaxed">
+        <p className="text-muted-foreground mb-14 max-w-md mx-auto leading-relaxed">
           An AI that responds like a real VC — skeptical, direct, and impossible
           to impress.
         </p>
 
-        <div className="bg-card border border-border rounded-lg p-6 space-y-4 text-left">
-          <div>
-            <label className="block text-sm text-muted-foreground mb-1.5">
-              Groq API Key
-            </label>
-            <input
-              type="password"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              placeholder="gsk_..."
-              className="w-full bg-secondary border border-border rounded-md px-3 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary text-sm"
-            />
-          </div>
+        <div className="w-full h-px bg-primary/30 mb-10" />
+
+        <div className="space-y-5 text-left">
           <div>
             <label className="block text-sm text-muted-foreground mb-1.5">
               Your Startup Idea
@@ -50,26 +39,13 @@ const LandingScreen = ({ onStart }: LandingScreenProps) => {
             />
           </div>
           <button
-            onClick={() => canSubmit && onStart(apiKey.trim(), idea.trim())}
+            onClick={() => canSubmit && onStart(idea.trim())}
             disabled={!canSubmit}
-            className="w-full bg-primary text-primary-foreground font-medium py-2.5 rounded-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full max-w-md mx-auto bg-primary text-primary-foreground font-semibold py-3 rounded-md flex items-center justify-center gap-2 hover:brightness-110 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Start Pitch <ArrowRight size={16} />
           </button>
         </div>
-
-        <p className="text-xs text-muted-foreground mt-4">
-          Free API key at{" "}
-          <a
-            href="https://console.groq.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            console.groq.com
-          </a>{" "}
-          · No credit card needed
-        </p>
       </div>
     </div>
   );
