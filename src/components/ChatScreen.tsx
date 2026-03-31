@@ -3,7 +3,6 @@ import { ArrowUp } from "lucide-react";
 import { ChatMessage, callGroq, parseVerdict, VerdictData } from "@/lib/groq";
 
 interface ChatScreenProps {
-  apiKey: string;
   initialIdea: string;
   onVerdict: (verdict: VerdictData) => void;
 }
