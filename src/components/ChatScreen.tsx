@@ -27,8 +27,8 @@ const TypingIndicator = () => (
 
 const RoundPips = ({ round }: { round: number }) => (
   <div className="flex flex-col items-center gap-2">
-    <div className="flex gap-2">
-      {[1, 2, 3].map((i) => (
+  <div className="flex gap-2">
+      {[1, 2, 3, 4, 5].map((i) => (
         <div
           key={i}
           className={`w-3 h-3 rounded-full border-2 border-primary transition-colors ${
@@ -38,7 +38,7 @@ const RoundPips = ({ round }: { round: number }) => (
       ))}
     </div>
     <span className="text-xs text-muted-foreground">
-      Round {Math.min(round + 1, 3)} of 3
+      Round {Math.min(round + 1, 5)} of 5
     </span>
   </div>
 );
