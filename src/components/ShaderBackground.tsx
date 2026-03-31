@@ -22,27 +22,27 @@ const FRAGMENT_SHADER = `
     float aspect = u_resolution.x / u_resolution.y;
     vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
 
-    float wave1 = sin(p.x * 3.0 + u_time * 0.4) * 0.15;
-    float wave2 = sin(p.x * 5.0 - u_time * 0.3 + 1.5) * 0.08;
-    float wave3 = sin(p.x * 2.0 + u_time * 0.25 + 3.0) * 0.12;
+    float wave1 = sin(p.x * 2.5 + u_time * 0.35) * 0.18;
+    float wave2 = sin(p.x * 4.0 - u_time * 0.25 + 1.5) * 0.10;
+    float wave3 = sin(p.x * 1.8 + u_time * 0.2 + 3.0) * 0.14;
 
     float dist1 = abs(p.y - wave1);
-    float dist2 = abs(p.y - wave2 - 0.1);
-    float dist3 = abs(p.y - wave3 + 0.15);
+    float dist2 = abs(p.y - wave2 - 0.12);
+    float dist3 = abs(p.y - wave3 + 0.18);
 
-    float glow1 = 0.006 / (dist1 + 0.01);
-    float glow2 = 0.004 / (dist2 + 0.01);
-    float glow3 = 0.005 / (dist3 + 0.01);
+    float glow1 = 0.012 / (dist1 * dist1 + 0.008);
+    float glow2 = 0.009 / (dist2 * dist2 + 0.008);
+    float glow3 = 0.010 / (dist3 * dist3 + 0.008);
 
-    float hue1 = fract(u_time * 0.05 + uv.x * 0.4);
-    float hue2 = fract(u_time * 0.05 + uv.x * 0.4 + 0.33);
-    float hue3 = fract(u_time * 0.05 + uv.x * 0.4 + 0.66);
+    float hue1 = fract(u_time * 0.04 + uv.x * 0.5);
+    float hue2 = fract(u_time * 0.04 + uv.x * 0.5 + 0.35);
+    float hue3 = fract(u_time * 0.04 + uv.x * 0.5 + 0.7);
 
-    vec3 col1 = hsl2rgb(hue1, 0.7, 0.5) * glow1;
-    vec3 col2 = hsl2rgb(hue2, 0.7, 0.5) * glow2;
-    vec3 col3 = hsl2rgb(hue3, 0.7, 0.5) * glow3;
+    vec3 col1 = hsl2rgb(hue1, 0.85, 0.55) * glow1;
+    vec3 col2 = hsl2rgb(hue2, 0.85, 0.55) * glow2;
+    vec3 col3 = hsl2rgb(hue3, 0.85, 0.55) * glow3;
 
-    vec3 color = (col1 + col2 + col3) * 0.35;
+    vec3 color = (col1 + col2 + col3) * 0.55;
 
     gl_FragColor = vec4(color, 1.0);
   }
