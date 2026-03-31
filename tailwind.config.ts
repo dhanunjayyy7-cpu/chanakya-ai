@@ -104,6 +104,8 @@ export default {
         "dot-pulse": "dot-pulse 1.4s ease-in-out infinite",
         "fade-in": "fade-in 0.4s ease-out",
         "verdict-reveal": "verdict-reveal 0.6s ease-out",
+        "fade-up": "fade-up 0.6s ease-out both",
+        "fade-up-delay": "fade-up 0.6s ease-out 0.2s both",
       },
     },
   },
