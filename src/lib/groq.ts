@@ -62,6 +62,7 @@ export function parseVerdict(text: string): VerdictData | null {
   if (!text.includes("VERDICT:")) return null;
 
   const verdictMatch = text.match(/VERDICT:\s*(PASS|CONDITIONAL YES|INVEST)/i);
+  const criticismMatch = text.match(/CRITICISM:\s*(.+?)(?=REASON:|$)/is);
   const reasonMatch = text.match(/REASON:\s*(.+?)(?=SCORE:|$)/is);
   const scoreMatch = text.match(
     /SCORE:\s*Idea\s*\[?(\d+)\/10\]?\s*\|\s*Market\s*\[?(\d+)\/10\]?\s*\|\s*Execution\s*\[?(\d+)\/10\]?/i
@@ -71,6 +72,7 @@ export function parseVerdict(text: string): VerdictData | null {
 
   return {
     type: verdictMatch[1].toUpperCase() as VerdictData["type"],
+    criticism: criticismMatch ? criticismMatch[1].trim().replace(/^[""]|[""]$/g, '') : "",
     reason: reasonMatch ? reasonMatch[1].trim() : "",
     scores: {
       idea: scoreMatch ? parseInt(scoreMatch[1]) : 5,
