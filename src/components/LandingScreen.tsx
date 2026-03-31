@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
-import chanakyaIcon from "@/assets/chanakya-icon.png";
 
 interface LandingScreenProps {
   onStart: (idea: string) => void;
