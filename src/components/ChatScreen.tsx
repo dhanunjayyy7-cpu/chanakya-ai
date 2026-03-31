@@ -77,7 +77,7 @@ const ChatScreen = ({ initialIdea, onVerdict }: ChatScreenProps) => {
       }
     };
     initChat();
-  }, [apiKey, initialIdea]);
+  }, [initialIdea]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
