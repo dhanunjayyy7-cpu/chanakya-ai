@@ -45,10 +45,16 @@ const VerdictScreen = ({ verdict, onReset }: VerdictScreenProps) => {
         </p>
 
         <div
-          className={`inline-block border-2 rounded-lg px-10 py-4 text-3xl md:text-4xl font-heading font-bold mb-8 ${style}`}
+          className={`inline-block border-2 rounded-lg px-10 py-4 text-3xl md:text-4xl font-heading font-bold mb-4 ${style}`}
         >
           {verdict.type}
         </div>
+
+        {verdict.criticism && (
+          <p className="text-muted-foreground italic text-sm md:text-base mb-8 max-w-md mx-auto">
+            "{verdict.criticism}"
+          </p>
+        )}
 
         <p className="text-foreground leading-relaxed mb-10 max-w-md mx-auto">
           {verdict.reason}
