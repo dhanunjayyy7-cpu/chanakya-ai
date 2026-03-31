@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import chanakyaIcon from "@/assets/chanakya-icon.png";
 
 interface LandingScreenProps {
   onStart: (idea: string) => void;
@@ -14,11 +15,21 @@ const LandingScreen = ({ onStart }: LandingScreenProps) => {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-lg text-center">
         <div className="animate-fade-up">
-          <h1 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-4 leading-[1.15]">
-            Pitch your idea.
-            <br />
-            <span className="text-primary">Get destroyed.</span>
+          <div className="flex justify-center mb-6">
+            <img
+              src={chanakyaIcon}
+              alt="Chanakya AI"
+              width={80}
+              height={80}
+              className="opacity-80 animate-hero-image drop-shadow-[0_0_20px_hsl(var(--primary)/0.3)]"
+            />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-3 leading-[1.15]">
+            Chanakya AI
           </h1>
+          <p className="text-muted-foreground/70 text-base md:text-lg mb-4 tracking-wide italic">
+            Every idea must prove itself.
+          </p>
           <p className="text-muted-foreground mb-14 max-w-md mx-auto leading-relaxed text-[15px]">
             An AI that responds like a real VC — skeptical, direct, and impossible
             to impress.

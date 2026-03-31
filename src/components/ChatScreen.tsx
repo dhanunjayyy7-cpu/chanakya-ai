@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { ArrowUp, TrendingUp } from "lucide-react";
+import { ArrowUp } from "lucide-react";
+import chanakyaIcon from "@/assets/chanakya-icon.png";
 import { ChatMessage, callGroq, parseVerdict, VerdictData } from "@/lib/groq";
 
 interface ChatScreenProps {

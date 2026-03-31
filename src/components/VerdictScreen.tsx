@@ -42,11 +42,9 @@ const VerdictScreen = ({ verdict, onReset }: VerdictScreenProps) => {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-lg text-center animate-verdict-reveal">
         <div className="flex items-center justify-center gap-2 mb-6">
-          <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center">
-            <TrendingUp size={14} className="text-primary" />
-          </div>
+          <img src={chanakyaIcon} alt="Chanakya" width={32} height={32} className="opacity-70" />
           <p className="text-muted-foreground text-sm tracking-wide">
-            Arjun · AI Venture Capitalist
+            Chanakya · AI Venture Capitalist
           </p>
         </div>
 
