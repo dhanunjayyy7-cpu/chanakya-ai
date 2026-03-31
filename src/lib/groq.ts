@@ -12,10 +12,11 @@ Rules:
 - Final verdict format ONLY:
 
 VERDICT: [PASS / CONDITIONAL YES / INVEST]
-REASON: [2-3 sentences max, brutal honesty]
+CRITICISM: [One sharp sentence highlighting the single biggest weakness — e.g. "weak differentiation", "unclear moat", "crowded market with no edge", "high execution risk with unproven team"]
+REASON: [2-3 sentences max. Be decisive and specific. Never use generic phrases like "has potential", "execution is key", or "interesting concept". State exactly why you would or would not invest. Sound like a real VC — slightly harsh, confident, zero fluff.]
 SCORE: Idea [X/10] | Market [X/10] | Execution [X/10]
 
-Never break character. Never be encouraging without reason.`;
+Never break character. Never be encouraging without reason. Never be polite or motivational in the verdict.`;
 
 export interface ChatMessage {
   role: "system" | "user" | "assistant";
@@ -24,6 +25,7 @@ export interface ChatMessage {
 
 export interface VerdictData {
   type: "PASS" | "CONDITIONAL YES" | "INVEST";
+  criticism: string;
   reason: string;
   scores: { idea: number; market: number; execution: number };
 }
@@ -60,6 +62,7 @@ export function parseVerdict(text: string): VerdictData | null {
   if (!text.includes("VERDICT:")) return null;
 
   const verdictMatch = text.match(/VERDICT:\s*(PASS|CONDITIONAL YES|INVEST)/i);
+  const criticismMatch = text.match(/CRITICISM:\s*(.+?)(?=REASON:|$)/is);
   const reasonMatch = text.match(/REASON:\s*(.+?)(?=SCORE:|$)/is);
   const scoreMatch = text.match(
     /SCORE:\s*Idea\s*\[?(\d+)\/10\]?\s*\|\s*Market\s*\[?(\d+)\/10\]?\s*\|\s*Execution\s*\[?(\d+)\/10\]?/i
@@ -69,6 +72,7 @@ export function parseVerdict(text: string): VerdictData | null {
 
   return {
     type: verdictMatch[1].toUpperCase() as VerdictData["type"],
+    criticism: criticismMatch ? criticismMatch[1].trim().replace(/^[""]|[""]$/g, '') : "",
     reason: reasonMatch ? reasonMatch[1].trim() : "",
     scores: {
       idea: scoreMatch ? parseInt(scoreMatch[1]) : 5,
