@@ -89,13 +89,22 @@ export default {
           "0%": { opacity: "0", transform: "translateY(6px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(20px) scale(0.95)" },
+          "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+        },
         "verdict-reveal": {
           "0%": { opacity: "0", transform: "scale(0.95)" },
           "100%": { opacity: "1", transform: "scale(1)" },
         },
-        "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(20px) scale(0.95)" },
-          "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+        "msg-in": {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "bg-zoom": {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.05)" },
+          "100%": { transform: "scale(1)" },
         },
       },
       animation: {
@@ -103,9 +112,11 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "dot-pulse": "dot-pulse 1.4s ease-in-out infinite",
         "fade-in": "fade-in 0.4s ease-out",
-        "verdict-reveal": "verdict-reveal 0.6s ease-out",
         "fade-up": "fade-up 0.6s ease-out both",
         "fade-up-delay": "fade-up 0.6s ease-out 0.2s both",
+        "verdict-reveal": "verdict-reveal 0.6s ease-out",
+        "msg-in": "msg-in 0.35s ease-out both",
+        "bg-zoom": "bg-zoom 20s ease-in-out infinite",
       },
     },
   },

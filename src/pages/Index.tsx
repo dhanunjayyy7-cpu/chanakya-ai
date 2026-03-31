@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LandingScreen from "@/components/LandingScreen";
 import ChatScreen from "@/components/ChatScreen";
 import VerdictScreen from "@/components/VerdictScreen";
@@ -10,37 +10,52 @@ const Index = () => {
   const [screen, setScreen] = useState<Screen>("landing");
   const [idea, setIdea] = useState("");
   const [verdict, setVerdict] = useState<VerdictData | null>(null);
+  const [transitioning, setTransitioning] = useState(false);
+  const [visible, setVisible] = useState(true);
+
+  const transitionTo = (next: Screen) => {
+    setVisible(false);
+    setTransitioning(true);
+    setTimeout(() => {
+      setScreen(next);
+      setTransitioning(false);
+      requestAnimationFrame(() => setVisible(true));
+    }, 300);
+  };
 
   const handleStart = (startupIdea: string) => {
     setIdea(startupIdea);
-    setScreen("chat");
+    transitionTo("chat");
   };
 
   const handleVerdict = (v: VerdictData) => {
     setVerdict(v);
-    setScreen("verdict");
+    transitionTo("verdict");
   };
 
   const handleReset = () => {
     setIdea("");
     setVerdict(null);
-    setScreen("landing");
+    transitionTo("landing");
   };
 
-  if (screen === "chat") {
-    return (
-      <ChatScreen
-        initialIdea={idea}
-        onVerdict={handleVerdict}
-      />
-    );
-  }
+  const transitionClass = visible
+    ? "opacity-100 translate-x-0"
+    : "opacity-0 translate-x-5";
 
-  if (screen === "verdict" && verdict) {
-    return <VerdictScreen verdict={verdict} onReset={handleReset} />;
-  }
-
-  return <LandingScreen onStart={handleStart} />;
+  return (
+    <div
+      className={`transition-all duration-300 ease-out ${transitionClass}`}
+    >
+      {screen === "chat" ? (
+        <ChatScreen initialIdea={idea} onVerdict={handleVerdict} />
+      ) : screen === "verdict" && verdict ? (
+        <VerdictScreen verdict={verdict} onReset={handleReset} />
+      ) : (
+        <LandingScreen onStart={handleStart} />
+      )}
+    </div>
+  );
 };
 
 export default Index;
