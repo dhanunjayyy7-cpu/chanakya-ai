@@ -24,6 +24,43 @@ Never break character. Never be encouraging without reason. Never be polite or m
 const normalizeApiKey = (value: string) =>
   value.trim().replace(/^['"]+|['"]+$/g, "");
 
+const callChatCompletion = async (
+  provider: "groq" | "lovable-ai",
+  url: string,
+  apiKey: string,
+  model: string,
+  messages: Array<{ role: string; content: string }>,
+) => {
+  console.log("AI provider request", { provider, model, keyConfigured: apiKey.length > 0 });
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
+      temperature: 0.7,
+      max_tokens: 300,
+    }),
+  });
+
+  const responseText = await res.text();
+
+  if (!res.ok) {
+    console.error("AI provider error", { provider, status: res.status, body: responseText });
+    return { ok: false as const, status: res.status, error: responseText };
+  }
+
+  const data = JSON.parse(responseText);
+  const content = data.choices?.[0]?.message?.content ?? "";
+  console.log("AI provider success", { provider, contentLength: content.length });
+
+  return { ok: true as const, content };
+};
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -63,32 +100,53 @@ Deno.serve(async (req) => {
       );
     }
 
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${GROQ_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
-        temperature: 0.7,
-        max_tokens: 300,
-      }),
-    });
+    const groqResult = await callChatCompletion(
+      "groq",
+      "https://api.groq.com/openai/v1/chat/completions",
+      GROQ_API_KEY,
+      "llama-3.3-70b-versatile",
+      messages,
+    );
 
-    if (!res.ok) {
-      const err = await res.text();
-      console.error("Groq API error:", res.status, err);
+    let content = "";
+
+    if (groqResult.ok) {
+      content = groqResult.content;
+    } else if (groqResult.status === 401) {
+      const lovableApiKey = normalizeApiKey(Deno.env.get("LOVABLE_API_KEY") ?? "");
+      console.warn("Groq rejected GROQ_API_KEY; falling back to Lovable AI", {
+        fallbackKeyConfigured: lovableApiKey.length > 0,
+      });
+
+      if (!lovableApiKey) {
+        return new Response(
+          JSON.stringify({ error: `Groq API error (401) and fallback AI key is not configured: ${groqResult.error}` }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      const fallbackResult = await callChatCompletion(
+        "lovable-ai",
+        "https://ai.gateway.lovable.dev/v1/chat/completions",
+        lovableApiKey,
+        "google/gemini-2.5-flash",
+        messages,
+      );
+
+      if (!fallbackResult.ok) {
+        return new Response(
+          JSON.stringify({ error: `Groq API error (401), fallback AI error (${fallbackResult.status}): ${fallbackResult.error}` }),
+          { status: fallbackResult.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      content = fallbackResult.content;
+    } else {
       return new Response(
-        JSON.stringify({ error: `Groq API error (${res.status}): ${err}` }),
-        { status: res.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: `Groq API error (${groqResult.status}): ${groqResult.error}` }),
+        { status: groqResult.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
-
-    const data = await res.json();
-    const content = data.choices?.[0]?.message?.content ?? "";
-    console.log("Groq API success", { contentLength: content.length });
 
     return new Response(JSON.stringify({ content }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
