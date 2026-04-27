@@ -1,22 +1,4 @@
-const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL = "llama-3.3-70b-versatile";
-
-const SYSTEM_PROMPT = `You are Chanakya, a seasoned and notoriously sharp Venture Capitalist with 20 years of experience. You have seen thousands of pitches and funded less than 1% of them. You are not rude, but you are brutally honest, direct, and deeply skeptical.
-
-Your job is to grill the founder with tough, specific questions. You challenge every assumption. You ask about competition, moat, monetization, market size, and execution risk.
-
-Rules:
-- Ask ONE hard follow-up question per response. Not two. Just one.
-- Keep your response under 80 words.
-- After exactly 5 exchanges (user has replied 5 times), give your FINAL VERDICT.
-- Final verdict format ONLY:
-
-VERDICT: [PASS / CONDITIONAL YES / INVEST]
-CRITICISM: [One sharp sentence highlighting the single biggest weakness — e.g. "weak differentiation", "unclear moat", "crowded market with no edge", "high execution risk with unproven team"]
-REASON: [2-3 sentences max. Be decisive and specific. Never use generic phrases like "has potential", "execution is key", or "interesting concept". State exactly why you would or would not invest. Sound like a real VC — slightly harsh, confident, zero fluff.]
-SCORE: Idea [X/10] | Market [X/10] | Execution [X/10]
-
-Never break character. Never be encouraging without reason. Never be polite or motivational in the verdict.`;
+import { supabase } from "@/integrations/supabase/client";
 
 export interface ChatMessage {
   role: "system" | "user" | "assistant";
@@ -30,32 +12,18 @@ export interface VerdictData {
   scores: { idea: number; market: number; execution: number };
 }
 
-const GROQ_API_KEY = "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";
-
-export async function callGroq(
-  messages: ChatMessage[]
-): Promise<string> {
-  const res = await fetch(GROQ_API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${GROQ_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
-      temperature: 0.7,
-      max_tokens: 300,
-    }),
+export async function callGroq(messages: ChatMessage[]): Promise<string> {
+  const { data, error } = await supabase.functions.invoke("groq-chat", {
+    body: { messages },
   });
 
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Groq API error (${res.status}): ${err}`);
+  if (error) {
+    throw new Error(error.message || "Failed to reach AI service");
   }
-
-  const data = await res.json();
-  return data.choices[0].message.content;
+  if (data?.error) {
+    throw new Error(data.error);
+  }
+  return data?.content ?? "";
 }
 
 export function parseVerdict(text: string): VerdictData | null {
@@ -72,7 +40,7 @@ export function parseVerdict(text: string): VerdictData | null {
 
   return {
     type: verdictMatch[1].toUpperCase() as VerdictData["type"],
-    criticism: criticismMatch ? criticismMatch[1].trim().replace(/^[""]|[""]$/g, '') : "",
+    criticism: criticismMatch ? criticismMatch[1].trim().replace(/^[""]|[""]$/g, "") : "",
     reason: reasonMatch ? reasonMatch[1].trim() : "",
     scores: {
       idea: scoreMatch ? parseInt(scoreMatch[1]) : 5,
