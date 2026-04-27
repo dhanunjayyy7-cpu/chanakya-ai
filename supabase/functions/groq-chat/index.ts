@@ -1,7 +1,7 @@
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 const SYSTEM_PROMPT = `You are Chanakya, a seasoned and notoriously sharp Venture Capitalist with 20 years of experience. You have seen thousands of pitches and funded less than 1% of them. You are not rude, but you are brutally honest, direct, and deeply skeptical.
@@ -21,16 +21,36 @@ SCORE: Idea [X/10] | Market [X/10] | Execution [X/10]
 
 Never break character. Never be encouraging without reason. Never be polite or motivational in the verdict.`;
 
+const normalizeApiKey = (value: string) =>
+  value.trim().replace(/^['"]+|['"]+$/g, "");
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
+    const rawGroqApiKey = Deno.env.get("GROQ_API_KEY") ?? "";
+    const GROQ_API_KEY = normalizeApiKey(rawGroqApiKey);
+    const hasWrappingCharacters = rawGroqApiKey !== GROQ_API_KEY;
+
+    console.log("GROQ_API_KEY diagnostics", {
+      configured: rawGroqApiKey.length > 0,
+      normalizedLength: GROQ_API_KEY.length,
+      startsWithGsk: GROQ_API_KEY.startsWith("gsk_"),
+      normalizedInput: hasWrappingCharacters,
+    });
+
     if (!GROQ_API_KEY) {
       return new Response(
         JSON.stringify({ error: "GROQ_API_KEY is not configured" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!GROQ_API_KEY.startsWith("gsk_")) {
+      return new Response(
+        JSON.stringify({ error: "GROQ_API_KEY is configured but does not look like a valid Groq key" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -68,6 +88,8 @@ Deno.serve(async (req) => {
 
     const data = await res.json();
     const content = data.choices?.[0]?.message?.content ?? "";
+    console.log("Groq API success", { contentLength: content.length });
+
     return new Response(JSON.stringify({ content }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
